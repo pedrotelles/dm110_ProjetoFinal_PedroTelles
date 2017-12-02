@@ -1,8 +1,7 @@
 package br.inatel.dm110.ippoller.entities;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
+
 import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 
@@ -27,6 +26,14 @@ public class PollerEquipment {
 	public void setStatus(boolean status) {
 		this.status = status;
 	}
-
+	public PollerEquipment(String address, boolean status) {
+		
+		this.address = address;
+		this.status = status;
+	}
+	public PollerEquipment() {
+		
+		
+	}
 	
 }

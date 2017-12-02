@@ -1,20 +1,30 @@
 package br.inatel.dm110.ippoller.mdb;
 
 import java.io.IOException;
+
+
 import java.io.InputStream;
 import java.util.List;
 import java.util.Scanner;
 
+import javax.ejb.ActivationConfigProperty;
+import javax.ejb.MessageDriven;
 import javax.ejb.EJB;
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.ObjectMessage;
+import javax.jms.TextMessage;
 
 import br.inatel.dm110.ippoller.dao.PollerEquipmentDAO;
 import br.inatel.dm110.ippoller.entities.PollerEquipment;
+import br.inatel.dm110.poller.api.PollerEquipmentListTO;
 import br.inatel.dm110.poller.api.PollerEquipmentTO;
 
+@MessageDriven(activationConfig  = {
+		@ActivationConfigProperty(propertyName = "destinationType", propertyValue = "javax.jms.Queue"),
+		@ActivationConfigProperty(propertyName = "destination", propertyValue = "java:/jms/queue/pollerequipmentqueue")
+})
 public class PollerEquipmentMDB implements MessageListener{
 	
 	@EJB
@@ -22,24 +32,37 @@ public class PollerEquipmentMDB implements MessageListener{
 	
 	@Override
 	public void onMessage(Message message) {
+		
 		try {
 			if (message instanceof ObjectMessage) {
 				ObjectMessage objMessage = (ObjectMessage) message;
-				Object object = objMessage.getObject();
-				List<PollerEquipmentTO> to = (List<PollerEquipmentTO>) object;
-				for(int i = 0; i<to.size();i++) {
+				Object obj = objMessage.getObject();
+				PollerEquipmentTO to = (PollerEquipmentTO) obj;
+				
+				if(obj instanceof PollerEquipmentTO) {
 					PollerEquipment eqp = new PollerEquipment();
-					eqp.setAddress(to.get(i).getAddress());
-					System.out.println("testando ip: "+ to.get(i).getAddress());
-					if(execPing(to.get(i).getAddress())) {
+					eqp.setAddress(to.getAddress());
+					System.out.println("testando ip: "+ to.getAddress());
+					if(execPing(to.getAddress())) {
 						eqp.setStatus(true);
 					} else {
 						eqp.setStatus(false);
 					}
-					dao.insert(eqp);
+					if(dao.checkbyip(to.getAddress())!=null) {
+						dao.edit(eqp);
+					}
+					else {
+						
+						dao.insert(eqp);
+					}
 				}
 				
 				
+				
+			}else if(message instanceof TextMessage){
+				TextMessage objMessage = (TextMessage) message;
+				String  obj = objMessage.getText();
+				System.out.println( 	 obj);
 			}
 			System.out.println("Fim do processamento");
 		} catch (JMSException e) {

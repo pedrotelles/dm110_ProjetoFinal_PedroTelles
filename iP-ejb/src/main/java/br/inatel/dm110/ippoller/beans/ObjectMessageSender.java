@@ -9,7 +9,10 @@ import javax.jms.MessageProducer;
 import javax.jms.ObjectMessage;
 import javax.jms.Queue;
 import javax.jms.Session;
+import javax.jms.TextMessage;
+
 import br.inatel.dm110.poller.api.PollerEquipmentListTO;
+import br.inatel.dm110.poller.api.PollerEquipmentTO;
 
 @Stateless
 public class ObjectMessageSender {
@@ -17,16 +20,35 @@ public class ObjectMessageSender {
 	@Resource(lookup = "java:/ConnectionFactory")
 	private ConnectionFactory connectionFactory;
 
-	@Resource(lookup = "java:/jms/queue/dm110queue")
+	@Resource(lookup = "java:/jms/queue/pollerequipmentqueue")
 	private Queue queue;
 
-	public void sendTextMessage(PollerEquipmentListTO list) {
+	public void sendObjectMessage(PollerEquipmentListTO list) {
 		try (
 				Connection connection = connectionFactory.createConnection();
-				Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
+				Session session = connection.createSession();
 				MessageProducer producer = session.createProducer(queue);
 		) {
-			ObjectMessage textMessage = session.createObjectMessage(list);
+			if(list instanceof PollerEquipmentListTO) {
+				for(PollerEquipmentTO item : list.getEqps()) {
+					ObjectMessage textMessage = session.createObjectMessage(item);
+					producer.send(textMessage);
+				}
+				
+			}
+			
+		} catch (JMSException e) {
+			throw new RuntimeException(e);
+		}
+	}
+	
+	public void sendTextMessage(String text) {
+		try (
+				Connection connection = connectionFactory.createConnection();
+				Session session = connection.createSession();
+				MessageProducer producer = session.createProducer(queue);
+		) {
+			TextMessage textMessage = session.createTextMessage(text);
 			producer.send(textMessage);
 		} catch (JMSException e) {
 			throw new RuntimeException(e);

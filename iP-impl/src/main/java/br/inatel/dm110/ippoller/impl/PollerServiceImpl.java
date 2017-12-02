@@ -4,7 +4,7 @@ package br.inatel.dm110.ippoller.impl;
 import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
 
-import br.inatel.dm110.hello.interfaces.PollerIntRemote;
+import br.inatel.dm110.ippoller.interfaces.PollerIntRemote;
 import br.inatel.dm110.poller.api.PollerEquipmentTO;
 import br.inatel.dm110.poller.api.PollerService;
 
@@ -12,7 +12,7 @@ import br.inatel.dm110.poller.api.PollerService;
 @RequestScoped
 public class PollerServiceImpl implements PollerService{
 
-	@EJB(lookup = "java:app/iP-ejb-0.1-SNAPSHOT/PollerBean!br.inatel.dm110.ippoller.interfaces.PollerRemote")
+	@EJB(lookup = "java:app/iP-ejb-0.1-SNAPSHOT/PollerBean!br.inatel.dm110.ippoller.interfaces.PollerIntRemote")
 	private PollerIntRemote remote;
 	
 	

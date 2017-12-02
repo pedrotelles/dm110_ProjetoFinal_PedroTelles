@@ -1,0 +1,6 @@
+CREATE TABLE public.pollerequipment
+(
+    address character varying(50) COLLATE pg_catalog."default" NOT NULL,
+    status boolean DEFAULT false,
+    CONSTRAINT pk_poller PRIMARY KEY (address)
+)

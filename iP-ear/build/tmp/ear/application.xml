@@ -3,7 +3,7 @@
   <module>
     <web>
       <web-uri>iP-war-0.1-SNAPSHOT.war</web-uri>
-      <context-root>iP</context-root>
+      <context-root>dm110</context-root>
     </web>
   </module>
   <module>

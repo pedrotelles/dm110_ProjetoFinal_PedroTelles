@@ -2,7 +2,7 @@ apply plugin: 'ear'
 
 dependencies {
 	deploy project(path: ':iP-war', configuration: 'archives')
-	deploy project(path: ':iP-ejb')
+	deploy project(path: ':iP-ejb', configuration: 'archives')
 	earlib project(':iP-api')
 	earlib project(':iP-impl')
 	earlib project(':iP-ejb-client')
