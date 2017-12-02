@@ -26,7 +26,7 @@ public class PollerServiceImpl implements PollerService{
 	
 
 	@Override
-	public PollerEquipmentTO checkstatus(String ip) {
+	public String checkstatus(String ip) {
 		// TODO Auto-generated method stub
 		return remote.checkbyIP(ip);
 		 

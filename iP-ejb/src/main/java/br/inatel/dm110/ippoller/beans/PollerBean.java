@@ -64,17 +64,17 @@ public class PollerBean implements PollerIntRemote,PollerIntLocal{
 
 
 	@Override
-	public PollerEquipmentTO checkbyIP(String address) {
+	public String checkbyIP(String address) {
 		// TODO Auto-generated method stub
 		PollerEquipment po =  dao.checkbyip(address);
 		if(po == null) {
-			return null;
+			return "IP inexistente";
 		}else {
 			PollerEquipmentTO pto = new PollerEquipmentTO();
 			pto.setAddress(po.getAddress());
 			
 			pto.setStatus(po.isStatus());
-			return pto;
+			return (pto.isStatus() ? "ativo" : "inativo" );
 		}
 		
 	}

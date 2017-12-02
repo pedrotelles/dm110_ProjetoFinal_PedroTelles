@@ -9,13 +9,13 @@ import javax.ws.rs.core.MediaType;
 @Path("/poller")
 public interface PollerService {
 	@GET
-	@Path("/start/{IP}/{Mask}")
+	@Path("/start/{ip}/{Mask}")
 	@Produces(MediaType.TEXT_HTML)
-	void scan(@PathParam("IP") String ip, @PathParam("Mask") String mask );
+	void scan(@PathParam("ip") String ip, @PathParam("Mask") String mask );
 	
 	@GET
-	@Path("/status/{IP}")
-	@Produces(MediaType.TEXT_HTML)
-	PollerEquipmentTO checkstatus(@PathParam("IP") String ip);
+	@Path("/status/{ip}")
+	@Produces(MediaType.TEXT_PLAIN)
+	String checkstatus(@PathParam("ip") String ip);
 
 }

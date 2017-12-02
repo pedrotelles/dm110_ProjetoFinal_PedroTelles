@@ -7,6 +7,6 @@ public interface PollerInt {
 
 	void startScan(String ip, String mask);
 
-	PollerEquipmentTO checkbyIP(String address);
+	String checkbyIP(String address);
 
 }
